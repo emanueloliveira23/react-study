@@ -59,7 +59,8 @@ class Game extends React.Component {
         }
       ],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      orderIsAscending: true
     };
   }
 
@@ -81,6 +82,12 @@ class Game extends React.Component {
     });
   }
 
+  handleChangeOrder(orderIsAscending) {
+    this.setState({
+      orderIsAscending: orderIsAscending
+    });
+  }
+
   jumpTo(step) {
     this.setState({
       stepNumber: step,
@@ -95,6 +102,10 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
+
+      if (!this.state.orderIsAscending) {
+        move = (history.length - 1) - move;
+      }
       const desc = move ? 'Move #' + move : 'Game Start';
       return (
         <li key={move}>
@@ -120,6 +131,24 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <div>
+            Move order:
+            <label>
+              <input
+                type="radio"
+                name="move-ordering"
+                defaultChecked={this.state.orderIsAscending}
+                onChange={(event) => this.handleChangeOrder(event.target.value)}/>
+              Ascending
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="move-ordering"
+                onChange={(event) => this.handleChangeOrder(!event.target.checked)}/>
+              Descending
+            </label>
+          </div>
           <ol>{moves}</ol>
         </div>
       </div>

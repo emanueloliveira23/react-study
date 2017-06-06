@@ -18,6 +18,7 @@ class Board extends React.Component {
     const highlight = this.props.winnerLine && this.props.winnerLine.indexOf(i) >= 0;
     return (
       <Square
+        key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
         highlight={highlight}
@@ -26,25 +27,17 @@ class Board extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    const numRows = 3;
+    const numCols = 3;
+    let rows = [];
+    for (let r = 0; r < numRows; r++) {
+      let row = [];
+      for (let c = 0; c < numCols; c++) {
+        row[c] = this.renderSquare(r * numRows + c);
+      }
+      rows[r] = <div key={r} className="board-row">{row}</div>;
+    }
+    return <div>{rows}</div>;
   }
 }
 
